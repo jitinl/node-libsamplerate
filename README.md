@@ -1,3 +1,19 @@
+# Fork of node-libsamplerate with prebuilt binaries
+
+Install with `npm install jitinl/node-libsamplerate`
+
+
+to make prebuilt binaries, 
+
+    git clone -recursive https://github.com/jitinl/node-libsamplerate.git
+    cd node-libsamplerate
+    npm run prebuild
+
+To upload them as github releases,
+
+    npm run upload
+
+
 # node-libsamplerate
 
 ABI stable native implementation of libsamplerate as a Transform stream. Built from the latest [libsamplerate](https://github.com/erikd/libsamplerate) code. Uses [N-API](https://nodejs.org/api/n-api.html), [node-addon-api](https://www.npmjs.com/package/node-addon-api) and [cmake-js](https://www.npmjs.com/package/cmake-js). This module has no external dependencies.

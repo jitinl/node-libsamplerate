@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 #set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 
-
+add_compile_definitions(NAPI_VERSION=${napi_build_version})
 
 # Build a shared library named after the project from the files in `src/`
 file(GLOB SOURCE_FILES "src/*.cc" "src/*.h")
