@@ -10,7 +10,8 @@ to make prebuilt binaries,
     npm run prebuild
 
 To upload them as github releases,
-
+    
+    export GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     npm run upload
 
 
