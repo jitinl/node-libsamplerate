@@ -1,4 +1,6 @@
 #include <napi.h>
+#include "../deps/include/samplerate.h"
+
 
 class SampleRateStream : public Napi::ObjectWrap<SampleRateStream> {
     public:
@@ -11,4 +13,6 @@ class SampleRateStream : public Napi::ObjectWrap<SampleRateStream> {
         Napi::Value Transform(const Napi::CallbackInfo& info);
         void SetRatio(const Napi::CallbackInfo& info);
         void Reset(const Napi::CallbackInfo& info);
+        SRC_STATE *src_state;
+        SRC_DATA data;
 };

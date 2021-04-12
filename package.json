@@ -23,7 +23,7 @@
         "wav"
     ],
     "scripts": {
-        "install": "prebuild-install --force -t 1 -r napi --backend cmake-js",
+        "install": "cmake-js compile",
         "prebuild": "prebuild -t 1 --runtime napi --backend cmake-js  --all --strip --verbose",
         "upload": "prebuild  -t 1 --runtime napi --backend cmake-js --upload ${GITHUB_TOKEN}",
         "test": "nyc mocha test/*.test.js",

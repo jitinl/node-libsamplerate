@@ -62,8 +62,6 @@ Napi::Object SampleRateStream::Init(Napi::Env env, Napi::Object exports)
     return exports;
 }
 
-static SRC_STATE *src_state;
-static SRC_DATA data;
 
 SampleRateStream::SampleRateStream(const Napi::CallbackInfo &info)
     : Napi::ObjectWrap<SampleRateStream>(info)
@@ -87,9 +85,9 @@ SampleRateStream::SampleRateStream(const Napi::CallbackInfo &info)
     uint32_t fromRate = inProps.Get("fromRate").As<Napi::Number>().Uint32Value();
     uint32_t toRate = inProps.Get("toRate").As<Napi::Number>().Uint32Value();
     double ratio = (double)toRate / (double)fromRate;
-    data.src_ratio = ratio;
+    this->data.src_ratio = ratio;
     int error;
-    if ((src_state = src_new(type, channels, &error)) == NULL)
+    if ((this->src_state = src_new(type, channels, &error)) == NULL)
     {
         throw Napi::Error::New(info.Env(), src_strerror(error));
     };
@@ -116,8 +114,8 @@ Napi::Value SampleRateStream::Transform(const Napi::CallbackInfo &info)
         depth = 32;
     }
     unsigned int inputFrames = (int)floor(lengthIn / (channels * (depth / 8)));
-    unsigned int outputFrames = (data.src_ratio * inputFrames) + 1;
-    unsigned int lengthOut = (int)floor(data.src_ratio * lengthIn);
+    unsigned int outputFrames = (this->data.src_ratio * inputFrames) + 1;
+    unsigned int lengthOut = (int)floor(this->data.src_ratio * lengthIn);
 
     if(fromDepth == 16 && toDepth !=16){
         lengthOut = lengthOut * 2;
@@ -139,12 +137,12 @@ Napi::Value SampleRateStream::Transform(const Napi::CallbackInfo &info)
         src_int_to_float_array((int *)inputBuffer, dataInFloat, inputFrames * 2);
     }
 
-    data.data_in = dataInFloat;
-    data.data_out = dataOutFloat;
-    data.input_frames = inputFrames;
-    data.output_frames = outputFrames;
+    this->data.data_in = dataInFloat;
+    this->data.data_out = dataOutFloat;
+    this->data.input_frames = inputFrames;
+    this->data.output_frames = outputFrames;
 
-    if ((error = src_process(src_state, &data)))
+    if ((error = src_process(this->src_state, &this->data)))
     {
         throw Napi::Error::New(info.Env(), src_strerror(error));
     };
@@ -154,13 +152,13 @@ Napi::Value SampleRateStream::Transform(const Napi::CallbackInfo &info)
     {
         depth = 32;
     }
-    lengthOut = data.output_frames_gen * channels * (depth / 8);
+    lengthOut = this->data.output_frames_gen * channels * (depth / 8);
     int *dataOut = new int[lengthOut];
-    int inFramesUsed = data.input_frames_used;
-    int frameDiff = data.input_frames - data.input_frames_used;
+    int inFramesUsed = this->data.input_frames_used;
+    int frameDiff = this->data.input_frames - this->data.input_frames_used;
     if (frameDiff != 0)
     {
-        std::cout << "outframes differs from inframes by " << frameDiff << std::endl;
+        std::cout << "outframes differs from inframes by " << frameDiff <<" output frames generated = "<<this->data.output_frames_gen<< " used ="<<this->data.input_frames_used<<std::endl;
     }
 
     if (toDepth == 16)
@@ -182,13 +180,13 @@ Napi::Value SampleRateStream::Transform(const Napi::CallbackInfo &info)
 void SampleRateStream::SetRatio(const Napi::CallbackInfo &info)
 {
     double ratio = info[0].As<Napi::Number>().DoubleValue();
-    data.src_ratio = ratio;
+    this->data.src_ratio = ratio;
 }
 
 void SampleRateStream::Reset(const Napi::CallbackInfo &info)
 {
     int error;
-    if ((error = src_reset(src_state)))
+    if ((error = src_reset(this->src_state)))
     {
         throw Napi::Error::New(info.Env(), src_strerror(error));
     };
