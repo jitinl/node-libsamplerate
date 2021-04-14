@@ -1,6 +1,5 @@
 node_modules/
 build/
-deps/include/
 .nyc_output/
 coverage/
 prebuilds/
