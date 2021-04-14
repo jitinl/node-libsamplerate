@@ -1,5 +1,5 @@
 const { Transform } = require('stream');
-const SampleRateStream = require('bindings')('node-libsamplerate').SampleRateStream;
+const SampleRateStream = require('./build/Release/node-libsamplerate-native.node').SampleRateStream;
 
 
 let defaultOpts = {

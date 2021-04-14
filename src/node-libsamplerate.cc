@@ -27,7 +27,8 @@ void float_to_s24_array(const float *in, int *out, int len)
         len--;
 
         scaled_value = in[len] * (8.0 * 0x200000);
-        if(scaled_value!= 0 ){
+        if (scaled_value != 0)
+        {
             double d = scaled_value;
         }
         if (scaled_value >= (1.0 * 0x7FFFFF))
@@ -61,7 +62,6 @@ Napi::Object SampleRateStream::Init(Napi::Env env, Napi::Object exports)
     exports.Set("SampleRateStream", transform);
     return exports;
 }
-
 
 SampleRateStream::SampleRateStream(const Napi::CallbackInfo &info)
     : Napi::ObjectWrap<SampleRateStream>(info)
@@ -98,7 +98,7 @@ Napi::Value SampleRateStream::Transform(const Napi::CallbackInfo &info)
     Napi::Env env = info.Env();
     void *inputBuffer;
     size_t lengthIn;
-    napi_get_buffer_info(env, info[0].As<Napi::Buffer<char>>(), &inputBuffer, &lengthIn);
+    napi_get_buffer_info(env, info[0].As<Napi::Buffer<char> >(), &inputBuffer, &lengthIn);
 
     Napi::Object props = info.This().As<Napi::Object>();
 
@@ -117,7 +117,8 @@ Napi::Value SampleRateStream::Transform(const Napi::CallbackInfo &info)
     unsigned int outputFrames = (this->data.src_ratio * inputFrames) + 1;
     unsigned int lengthOut = (int)floor(this->data.src_ratio * lengthIn);
 
-    if(fromDepth == 16 && toDepth !=16){
+    if (fromDepth == 16 && toDepth != 16)
+    {
         lengthOut = lengthOut * 2;
     }
 
@@ -141,6 +142,7 @@ Napi::Value SampleRateStream::Transform(const Napi::CallbackInfo &info)
     this->data.data_out = dataOutFloat;
     this->data.input_frames = inputFrames;
     this->data.output_frames = outputFrames;
+    this->data.end_of_input = 0;
 
     if ((error = src_process(this->src_state, &this->data)))
     {
@@ -155,11 +157,16 @@ Napi::Value SampleRateStream::Transform(const Napi::CallbackInfo &info)
     lengthOut = this->data.output_frames_gen * channels * (depth / 8);
     int *dataOut = new int[lengthOut];
     int inFramesUsed = this->data.input_frames_used;
-    int frameDiff = this->data.input_frames - this->data.input_frames_used;
-    if (frameDiff != 0)
-    {
-        std::cout << "outframes differs from inframes by " << frameDiff <<" output frames generated = "<<this->data.output_frames_gen<< " used ="<<this->data.input_frames_used<<std::endl;
-    }
+    // int frameDiff = this->data.input_frames - this->data.input_frames_used;
+    // if (frameDiff != 0)
+    // {
+    //     std::cout << "outframes differs from inframes by " << frameDiff << " output frames generated = " << this->data.output_frames_gen << " used =" << this->data.input_frames_used << std::endl;
+    // }
+
+    // if(this->data.output_frames_gen!=this->data.input_frames)
+    // {
+    //     std::cout <<"outframes gen = "<<data.output_frames_gen<<" in used "<<data.input_frames<<std::endl;
+    // }
 
     if (toDepth == 16)
     {
@@ -191,4 +198,3 @@ void SampleRateStream::Reset(const Napi::CallbackInfo &info)
         throw Napi::Error::New(info.Env(), src_strerror(error));
     };
 }
-

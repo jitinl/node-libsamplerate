@@ -1,18 +1,34 @@
-# Fork of node-libsamplerate with prebuilt binaries
-
-Install with `npm install jitinl/node-libsamplerate`
+# Fork of node-libsamplerate with prebuilt binaries and bug fixes
 
 
-to make prebuilt binaries, 
+## Installation
 
-    git clone -recursive https://github.com/jitinl/node-libsamplerate.git
-    cd node-libsamplerate
+    npm install jitinl/node-libsamplerate
+
+## Bug fixes
+
+- it is possible to use multiple libsamplerate streams in a chain. For example `resampler1.pipe(mystream).pipe(resampler2)`. This does not work in the original implementation as there's only a single options structure shared throughout the library, so the options applied to `resampler1` would end up applying to `resampler1` as well.
+- uses node-gyp instead of cmakejs
+- comes with prebuilt binaries
+- uses the latest version of libsamplerate
+
+## Development
+
+
+To update or add prebuilt binaries for your platform:
+
+- Build the latest [libsamplerate](https://github.com/erikd/libsamplerate) code.  
+- Copy over the `libsamplerate.a` file to the folder corresponding to your platform in the `/lib` folder in this project directory. If there's no folder corresponding to your platform, make one (refer to `lib/copylib.js` for the folder name ). Otherwise just place the `libsamplerate.a` file directly in the `lib` folder.
+
+- to now make prebuilt binaries for your platform, 
+
     npm run prebuild
 
-To upload them as github releases,
+- To upload them as github releases,
     
     export GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     npm run upload
+
 
 
 # node-libsamplerate
