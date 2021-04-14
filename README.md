@@ -27,6 +27,7 @@ To update or add prebuilt binaries for your platform:
 - To upload them as github releases,
     
     export GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    
     npm run upload
 
 
