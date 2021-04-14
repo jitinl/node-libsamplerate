@@ -24,7 +24,7 @@
     "wav"
   ],
   "scripts": {
-    "install": "prebuild-install -r napi || node-gyp rebuild",
+    "install": "prebuild-install -r napi",
     "prebuild": "prebuild --runtime napi --all --strip --verbose",
     "upload": "prebuild --runtime napi --upload ${GITHUB_TOKEN}",
     "rebuild": "node-gyp rebuild"
