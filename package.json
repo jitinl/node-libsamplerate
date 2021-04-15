@@ -1,7 +1,7 @@
 {
   "name": "node-libsamplerate",
   "gypfile": true,
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Native bindings for libsamplerate",
   "main": "index.js",
   "license": "MIT",
@@ -30,7 +30,6 @@
     "rebuild": "node-gyp rebuild"
   },
   "dependencies": {
-    "node-addon-api": "^3.1.0",
     "prebuild-install": "^6.1.1"
   },
   "engines": {
@@ -47,6 +46,7 @@
   "devDependencies": {
     "audio-generator": "^2.1.2",
     "mocha": "^5.2.0",
+    "node-addon-api": "^3.1.0",
     "nyc": "^13.0.1",
     "prebuild": "^10.0.1",
     "sinon": "^6.3.3"
