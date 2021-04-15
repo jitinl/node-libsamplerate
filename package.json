@@ -1,7 +1,7 @@
 {
   "name": "node-libsamplerate",
   "gypfile": true,
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Native bindings for libsamplerate",
   "main": "index.js",
   "license": "MIT",
@@ -24,9 +24,9 @@
     "wav"
   ],
   "scripts": {
-    "install": "prebuild-install -t 3 -r napi",
-    "prebuild": "prebuild -t 3 --runtime napi --all --strip --verbose",
-    "upload": "prebuild -t 3 --runtime napi --upload ${GITHUB_TOKEN}",
+    "install": "prebuild-install",
+    "prebuild": "prebuild --all --strip --verbose",
+    "upload": "prebuild--upload-all ${GITHUB_TOKEN}",
     "rebuild": "node-gyp rebuild"
   },
   "dependencies": {
